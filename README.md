@@ -58,6 +58,9 @@ aws configure
 ```
 # ====== 사전 작업 ======
 
+# terraform 폴더로 이동
+cd terraform
+
 # 코드 포맷만 정리
 terraform fmt -recursive
 
