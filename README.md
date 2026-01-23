@@ -97,32 +97,35 @@ terraform destroy
 
 ```
 
-## 📦 Terraform State Management : AWS S3
+## 📦 Terraform State Management (S3 Backend)
 
-Terraform state는 현재 인프라의 실제 상태를 기록하는 핵심 정보로,
-로컬에 저장할 경우 사용자별 상태 불일치 및 협업 시 충돌 위험이 존재합니다.
-이를 방지하기 위해 상태를 중앙 저장소에서 관리하는 것이 Best Practice로 알려져 있습니다.
+Terraform state를 여러 환경에서 일관되게 관리하기 위해,
+본 레포지토리는 S3를 원격 backend로 사용합니다.
 
-### [ Best Practice : S3 + DynamoDB ]
+### 1. S3 버킷을 AWS 콘솔 또는 CLI를 통해 생성
 
-Terraform 공식 문서와 실무 사례에서는 보통 다음 조합을 권장합니다.
+```
+aws s3api create-bucket \
+  --bucket <BUCKEY_NAME> \
+  --region <REGION> \
+  --create-bucket-configuration LocationConstraint=<REGION>
+```
 
-- **S3**: Terraform state 파일을 중앙에서 안전하게 저장하기 위한 저장소
-- **DynamoDB**: state 변경 시 동시 실행을 방지하기 위한 상태 잠금(State Locking) 용도
+### 2. backend.tf 생성
 
-### [ 결정 : AWS S3 ]
+`terraform/` 디렉토리 하위에 `backend.tf` 파일을 생성합니다.
 
-- 인프라가 이미 AWS 환경에서 운영되고 있어 별도의 외부 저장소를 추가할 필요가 없었고
-- 팀 내에서 S3 사용 경험이 있어 학습 비용 없이 바로 적용할 수 있었으며
-- 현재 인프라를 관리하는 인원이 많지 않아 <br>
-  동시에 Terraform을 실행할 가능성이 낮다고 판단했기 때문입니다.
+```
+terraform {
+  backend "s3" {
+    bucket = "<BUCKET_NAME>"        # 1번에서 생성한 버킷명
+    key    = "<TERRAFORM_TFSTATE>"  # state 파일이 저장될 경로
+    region = "<REGION>"             # S3 버킷이 위치한 리전
+  }
+}
+```
 
-불필요한 구성 요소를 처음부터 추가하기보다는,
-**운영 복잡도를 최소화하면서 필요한 수준의 안정성만 확보하는 방향**을 선택했습니다.
-
-향후 인프라 규모가 커지거나,
-Terraform을 동시에 사용하는 인원이 늘어날 경우에는
-**DynamoDB를 통한 State Locking 도입을 검토할 예정**입니다.
+- S3 region은 Terraform을 실행할 AWS 리전과 동일하게 설정해야합니다.
 
 ## ⚠️ Notes
 
