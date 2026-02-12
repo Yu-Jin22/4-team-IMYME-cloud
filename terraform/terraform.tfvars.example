@@ -1,0 +1,41 @@
+aws_region  = "ap-northeast-2"
+environment = "dev"
+
+parameters = {
+  "database/host" = {
+    value       = "db.example.com"
+    type        = "String"
+    description = "Database host address"
+    tier        = "Standard"
+  }
+  "database/port" = {
+    value       = "5432"
+    type        = "String"
+    description = "Database port"
+    tier        = "Standard"
+  }
+  "database/username" = {
+    value       = "admin"
+    type        = "String"
+    description = "Database username"
+    tier        = "Standard"
+  }
+  "database/password" = {
+    value       = "change-me-in-production"
+    type        = "SecureString"
+    description = "Database password (encrypted)"
+    tier        = "Standard"
+  }
+  "api/secret-key" = {
+    value       = "your-secret-key-here"
+    type        = "SecureString"
+    description = "API secret key (encrypted)"
+    tier        = "Standard"
+  }
+  "app/allowed-origins" = {
+    value       = "https://example.com,https://app.example.com"
+    type        = "StringList"
+    description = "Allowed CORS origins"
+    tier        = "Standard"
+  }
+}
