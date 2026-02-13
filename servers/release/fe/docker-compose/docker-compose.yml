@@ -1,0 +1,10 @@
+services:
+  frontend:
+    image: 219268921033.dkr.ecr.ap-northeast-2.amazonaws.com/imyme-frontend:latest
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    restart: always
+    volumes:
+      - ./logs:/app/logs
