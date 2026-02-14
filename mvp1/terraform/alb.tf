@@ -1,8 +1,3 @@
-# Data source for existing certificate
-data "aws_acm_certificate" "main" {
-  arn = "arn:aws:acm:ap-northeast-2:219268921033:certificate/b646df55-259b-4122-8218-30e64f0850e6"
-}
-
 # Application Load Balancer
 resource "aws_lb" "prod" {
   name               = "mine-mvp1-alb-internet-prod"
@@ -50,7 +45,7 @@ resource "aws_lb_listener" "https" {
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-Res-PQ-2025-09"
-  certificate_arn   = data.aws_acm_certificate.main.arn
+  certificate_arn   = "arn:aws:acm:ap-northeast-2:219268921033:certificate/b646df55-259b-4122-8218-30e64f0850e6"
 
   default_action {
     type             = "forward"
@@ -59,18 +54,10 @@ resource "aws_lb_listener" "https" {
 }
 
 # Listener Rule: /server/* -> Backend
+# Note: URL rewrite transform needs to be added manually via AWS CLI or Console
 resource "aws_lb_listener_rule" "backend" {
   listener_arn = aws_lb_listener.https.arn
   priority     = 1
-
-  action {
-    type = "url-rewrite"
-
-    url_rewrite {
-      path_pattern = "^/server/(.*)$"
-      replacement  = "/$1"
-    }
-  }
 
   action {
     type             = "forward"

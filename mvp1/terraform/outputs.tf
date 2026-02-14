@@ -41,3 +41,18 @@ output "fe_asg_name" {
   description = "Name of the frontend ASG"
   value       = aws_autoscaling_group.fe_prod.name
 }
+
+output "alb_arn" {
+  description = "ARN of the ALB"
+  value       = aws_lb.prod.arn
+}
+
+output "alb_dns_name" {
+  description = "DNS name of the ALB"
+  value       = aws_lb.prod.dns_name
+}
+
+output "alb_zone_id" {
+  description = "Zone ID of the ALB"
+  value       = aws_lb.prod.zone_id
+}
