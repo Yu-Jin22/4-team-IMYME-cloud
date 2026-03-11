@@ -1,0 +1,23 @@
+# 테스트용 네임스페이스
+namespace: mine-app-test
+
+frontend:
+  enabled: true
+  replicaCount: 2
+  containerPort: 3000
+
+  image:
+    repository: 219268921033.dkr.ecr.ap-northeast-2.amazonaws.com/imyme-frontend
+    tag: "aaab6b89977d1a3db520b23bea7586de42c8a49e"
+    pullPolicy: IfNotPresent
+
+  service:
+    port: 3000
+
+  resources:
+    requests:
+      cpu: "300m"
+      memory: "512Mi"
+    limits:
+      cpu: "600m"
+      memory: "1Gi"
