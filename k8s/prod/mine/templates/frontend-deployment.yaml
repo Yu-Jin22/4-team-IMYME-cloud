@@ -20,6 +20,8 @@ spec:
       labels:
         app: frontend
     spec:
+      imagePullSecrets:
+        - name: ecr-registry-helper
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       affinity:
