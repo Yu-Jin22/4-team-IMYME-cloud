@@ -55,11 +55,10 @@ spec:
               memory: {{ .Values.frontend.resources.limits.memory | quote }}
           readinessProbe:
             httpGet:
-              path: /api/health
+              path: {{ .Values.frontend.probes.readinessPath }}
               port: {{ .Values.frontend.containerPort }}
-            initialDelaySeconds: 10
-            periodSeconds: 10
-            timeoutSeconds: 3
-            successThreshold: 1
-            failureThreshold: 3
+            initialDelaySeconds: {{ .Values.frontend.probes.initialDelaySeconds }}
+            periodSeconds: {{ .Values.frontend.probes.periodSeconds }}
+            timeoutSeconds: {{ .Values.frontend.probes.timeoutSeconds }}
+            failureThreshold: {{ .Values.frontend.probes.failureThreshold }}
 {{- end }}
