@@ -22,6 +22,10 @@ frontend:
       cpu: "600m"
       memory: "1Gi"
 
+  secret:
+    enabled: true
+    name: frontend-secret
+
   probes:
     readinessPath: /api/health
     initialDelaySeconds: 10
@@ -50,12 +54,8 @@ backend:
       cpu: "1000m"
       memory: "1Gi"
 
-  env:
-    enabled: true
-    profile: "prod"
-
   secret:
-    enabled: false
+    enabled: true
     name: backend-secret
 
   probes:
@@ -103,7 +103,7 @@ ai:
       memory: "1Gi"
 
   secret:
-    enabled: false
+    enabled: true
     name: ai-secret
 
   probes:
