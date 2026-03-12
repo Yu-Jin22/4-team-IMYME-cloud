@@ -47,18 +47,12 @@ spec:
           ports:
             - containerPort: {{ .Values.backend.containerPort }}
 
-          {{- if or .Values.backend.env.enabled .Values.backend.secret.enabled }}
-          env:
-            {{- if .Values.backend.env.enabled }}
-            - name: SPRING_PROFILES_ACTIVE
-              value: {{ .Values.backend.env.profile | quote }}
-            {{- end }}
-          {{- end }}
-
-          {{- if .Values.backend.secret.enabled }}
+          {{- with .Values.backend.secret }}
+          {{- if .enabled }}
           envFrom:
             - secretRef:
-                name: {{ .Values.backend.secret.name }}
+                name: {{ .name }}
+          {{- end }}
           {{- end }}
 
           resources:

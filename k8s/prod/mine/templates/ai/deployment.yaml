@@ -47,10 +47,12 @@ spec:
           ports:
             - containerPort: {{ .Values.ai.containerPort }}
 
-          {{- if .Values.ai.secret.enabled }}
+          {{- with .Values.ai.secret }}
+          {{- if .enabled }}
           envFrom:
             - secretRef:
-                name: {{ .Values.ai.secret.name }}
+                name: {{ .name }}
+          {{- end }}
           {{- end }}
 
           resources:

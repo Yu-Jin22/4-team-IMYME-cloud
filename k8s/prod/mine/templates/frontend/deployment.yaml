@@ -46,6 +46,15 @@ spec:
           imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.frontend.containerPort }}
+
+          {{- with .Values.frontend.secret }}
+          {{- if .enabled }}
+          envFrom:
+            - secretRef:
+                name: {{ .name }}
+          {{- end }}
+          {{- end }}
+          
           resources:
             requests:
               cpu: {{ .Values.frontend.resources.requests.cpu | quote }}
