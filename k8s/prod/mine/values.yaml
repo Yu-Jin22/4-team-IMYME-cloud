@@ -12,7 +12,7 @@ frontend:
     pullPolicy: IfNotPresent
 
   service:
-    port: 3000
+    port: 80
 
   resources:
     requests:
@@ -44,7 +44,7 @@ backend:
     pullPolicy: IfNotPresent
 
   service:
-    port: 8080
+    port: 80
 
   resources:
     requests:
@@ -92,7 +92,7 @@ ai:
     pullPolicy: IfNotPresent
 
   service:
-    port: 8000
+    port: 80
 
   resources:
     requests:
@@ -127,3 +127,41 @@ ai:
       periodSeconds: 10
       timeoutSeconds: 3
       failureThreshold: 60
+
+ingress:
+  enabled: true
+  className: traefik
+  name: mine-app-test-ingress
+
+  # 테스트끝나면 네임스페이스명 변경해야함
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: mine-app-test-mine-strip-prefix@kubernetescrd
+
+  middleware:
+    enabled: true
+    name: mine-strip-prefix
+    stripPrefixes:
+      - /server
+      - /ai
+      - /ws
+
+  paths:
+    - path: /server
+      pathType: Prefix
+      serviceName: backend-svc
+      servicePort: 80
+
+    - path: /ai
+      pathType: Prefix
+      serviceName: ai-svc
+      servicePort: 80
+
+    - path: /ws
+      pathType: Prefix
+      serviceName: backend-svc
+      servicePort: 80
+
+    - path: /
+      pathType: Prefix
+      serviceName: frontend-svc
+      servicePort: 80
