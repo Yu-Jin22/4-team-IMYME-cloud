@@ -60,9 +60,9 @@ backend:
 
   probes:
     # readinessPath는 수정필요
-    readinessPath: /server/health
-    livenessPath: /server/health
-    startupPath: /server/health
+    readinessPath: /actuator/health
+    livenessPath: /actuator/health
+    startupPath: /actuator/health
 
     readiness:
       initialDelaySeconds: 20
