@@ -165,3 +165,28 @@ ingress:
       pathType: Prefix
       serviceName: frontend-svc
       servicePort: 80
+
+ecrPullSecret:
+  enabled: true
+
+  secretName: ecr-registry-helper
+  schedule: "0 */11 * * *"
+
+  aws:
+    region: ap-northeast-2
+    accountId: "219268921033"
+
+  registry:
+    server: 219268921033.dkr.ecr.ap-northeast-2.amazonaws.com
+    username: AWS
+
+  image:
+    repository: public.ecr.aws/aws-cli/aws-cli
+    tag: "2.27.41"
+
+  serviceAccount:
+    create: true
+    name: ecr-secret-refresher
+
+  rbac:
+    create: true
