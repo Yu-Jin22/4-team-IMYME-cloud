@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-deployment
+  name: frontend
   namespace: {{ .Values.namespace }}
 spec:
   replicas: {{ .Values.frontend.replicaCount }}
@@ -54,7 +54,7 @@ spec:
                 name: {{ .name }}
           {{- end }}
           {{- end }}
-          
+
           resources:
             requests:
               cpu: {{ .Values.frontend.resources.requests.cpu | quote }}

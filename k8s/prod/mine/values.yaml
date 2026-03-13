@@ -1,5 +1,4 @@
-# 테스트용 네임스페이스
-namespace: mine-app-test
+namespace: mine-app
 
 frontend:
   enabled: true
@@ -8,7 +7,7 @@ frontend:
 
   image:
     repository: 219268921033.dkr.ecr.ap-northeast-2.amazonaws.com/imyme-frontend
-    tag: "10db735e0581316df9bc6db9fbdbef219a7aff27"
+    tag: "aaab6b89977d1a3db520b23bea7586de42c8a49e"
     pullPolicy: IfNotPresent
 
   service:
@@ -40,7 +39,7 @@ backend:
 
   image:
     repository: 219268921033.dkr.ecr.ap-northeast-2.amazonaws.com/imyme-backend
-    tag: "f7be398a3f0a74d3da9bdd0fc26443ecfeecec11"
+    tag: "02e286469bd44e33e5f357ff5d6f9c4ab3b5e0d1"
     pullPolicy: IfNotPresent
 
   service:
@@ -88,7 +87,7 @@ ai:
 
   image:
     repository: 219268921033.dkr.ecr.ap-northeast-2.amazonaws.com/imyme-ai
-    tag: "0d5e33daacc1f1c22400aca5344b46644958f64b"
+    tag: "685d193a25afd3712a2f243405e3970b21c5982b"
     pullPolicy: IfNotPresent
 
   service:
@@ -131,11 +130,10 @@ ai:
 ingress:
   enabled: true
   className: traefik
-  name: mine-app-test-ingress
+  name: mine-app-ingress
 
-  # 테스트끝나면 네임스페이스명 변경해야함
   annotations:
-    traefik.ingress.kubernetes.io/router.middlewares: mine-app-test-mine-strip-prefix@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: mine-app-mine-strip-prefix@kubernetescrd
 
   middleware:
     enabled: true
