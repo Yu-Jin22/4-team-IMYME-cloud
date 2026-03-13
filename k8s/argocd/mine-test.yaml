@@ -17,8 +17,5 @@ spec:
     # 테스트용 네임스페이스
     namespace: mine-app-test
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
     syncOptions:
       - CreateNamespace=true

@@ -129,7 +129,7 @@ ai:
       failureThreshold: 60
 
 ingress:
-  enabled: true
+  enabled: false
   className: traefik
   name: mine-app-test-ingress
 
