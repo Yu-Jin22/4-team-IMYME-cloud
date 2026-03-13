@@ -1,0 +1,15 @@
+{{- if .Values.ai.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-svc
+  namespace: {{ .Values.namespace }}
+spec:
+  type: ClusterIP
+  selector:
+    app: ai
+  ports:
+    - port: {{ .Values.ai.service.port }}
+      targetPort: {{ .Values.ai.containerPort }}
+      protocol: TCP
+{{- end }}

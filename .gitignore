@@ -40,7 +40,38 @@ terraform.rc
 # System Files
 .DS_Store
 Thumbs.db
+.vscode/
+.idea/
 
 #environment variables file
 .env
 .env.*
+
+# SOPS / age / key material
+*.pem
+*.key
+*.crt
+*.p12
+*.agekey
+.secrets/
+secret*.yaml
+
+# Helm local artifacts
+*.tgz
+charts/
+tmp/
+.rendered/
+.manifests/
+
+# Helm values overrides
+values.local.yaml
+values.dev.local.yaml
+values.prod.local.yaml
+values.secret.yaml
+values.secrets.yaml
+*.secret.yaml
+
+# kube / local config
+.kube/
+kubeconfig
+*.kubeconfig

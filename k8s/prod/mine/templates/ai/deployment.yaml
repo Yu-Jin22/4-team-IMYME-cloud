@@ -1,0 +1,94 @@
+{{- if .Values.ai.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.ai.replicaCount }}
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: ai
+  template:
+    metadata:
+      labels:
+        app: ai
+    spec:
+      imagePullSecrets:
+        - name: ecr-registry-helper
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app: ai
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: ai
+      containers:
+        - name: mine-ai
+          image: "{{ .Values.ai.image.repository }}:{{ .Values.ai.image.tag }}"
+          imagePullPolicy: {{ .Values.ai.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.ai.containerPort }}
+
+          {{- with .Values.ai.secret }}
+          {{- if .enabled }}
+          envFrom:
+            - secretRef:
+                name: {{ .name }}
+          {{- end }}
+          {{- end }}
+
+          resources:
+            requests:
+              cpu: {{ .Values.ai.resources.requests.cpu | quote }}
+              memory: {{ .Values.ai.resources.requests.memory | quote }}
+            limits:
+              cpu: {{ .Values.ai.resources.limits.cpu | quote }}
+              memory: {{ .Values.ai.resources.limits.memory | quote }}
+
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.ai.probes.readinessPath }}
+              port: {{ .Values.ai.containerPort }}
+            initialDelaySeconds: {{ .Values.ai.probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.ai.probes.readiness.periodSeconds }}
+            timeoutSeconds: {{ .Values.ai.probes.readiness.timeoutSeconds }}
+            successThreshold: 1
+            failureThreshold: {{ .Values.ai.probes.readiness.failureThreshold }}
+
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.ai.probes.livenessPath }}
+              port: {{ .Values.ai.containerPort }}
+            initialDelaySeconds: {{ .Values.ai.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.ai.probes.liveness.periodSeconds }}
+            timeoutSeconds: {{ .Values.ai.probes.liveness.timeoutSeconds }}
+            successThreshold: 1
+            failureThreshold: {{ .Values.ai.probes.liveness.failureThreshold }}
+
+          startupProbe:
+            httpGet:
+              path: {{ .Values.ai.probes.startupPath }}
+              port: {{ .Values.ai.containerPort }}
+            periodSeconds: {{ .Values.ai.probes.startup.periodSeconds }}
+            timeoutSeconds: {{ .Values.ai.probes.startup.timeoutSeconds }}
+            successThreshold: 1
+            failureThreshold: {{ .Values.ai.probes.startup.failureThreshold }}
+{{- end }}
