@@ -141,7 +141,6 @@ ingress:
     stripPrefixes:
       - /server
       - /ai
-      - /ws
 
   paths:
     - path: /server
