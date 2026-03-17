@@ -1,3 +1,6 @@
+// 3000명 동시 접속 후
+// 30초동안 유지
+
 import http from 'k6/http';
 import { check } from 'k6';
 
