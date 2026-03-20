@@ -1,10 +1,9 @@
 # ☁️ Mine Cloud Infrastructure
 
-<img width="1238" height="701" alt="Image" src="https://github.com/user-attachments/assets/3ed55f22-60fc-4c21-9235-b0b69b6bce11" />
-
-이 레포지토리는 **MINE 서비스의 클라우드 인프라를 코드로 설계하고 구성한 내용을 정리한 저장소**입니다.
-
+이 레포지토리는 **MINE 서비스의 클라우드 인프라를 코드로 설계하고 구성한 내용을 정리한 저장소**입니다. <br>
 단일 서버 구조에서 시작하여, Docker 기반 확장 아키텍처를 거쳐, 현재는 Kubernetes 기반으로 고도화된 인프라를 운영하고 있습니다.
+
+<img width="1238" height="701" alt="Image" src="https://github.com/user-attachments/assets/3ed55f22-60fc-4c21-9235-b0b69b6bce11" />
 
 ## 📄 Documentation
 
