@@ -1,55 +1,134 @@
-# Mine Cloud Infrastructure
+# Terraform AWS Infrastructure
 
-<img width="1238" height="701" alt="Image" src="https://github.com/user-attachments/assets/3ed55f22-60fc-4c21-9235-b0b69b6bce11" />
+Terraform을 사용하여 AWS 인프라(VPC, Subnet, Security Group, EC2)를
+코드(IaC)로 관리하는 인프라 레포지토리입니다.
 
-이 레포지토리는 **MINE 서비스의 클라우드 인프라를 코드로 설계하고 구성한 내용을 정리한 저장소**입니다.
+현재는 Big-Bang 배포를 기준으로 한 단순한 인프라 구성을 다루고 있지만,
+서비스와 인프라 구조가 변화함에 따라
+해당 레포지토리 또한 점진적으로 확장·개선해 나갈 예정입니다.
 
-단일 서버 구조에서 시작하여, Docker 기반 확장 아키텍처를 거쳐, 현재는 Kubernetes 기반으로 고도화된 인프라를 운영하고 있습니다.
-
-## 📄 Documentation
-
-- [Cloud Wiki 바로가기](https://github.com/100-hours-a-week/4-team-IMYME-wiki/wiki/Cloud-WIKI)
-- [Team Wiki 바로가기](https://github.com/100-hours-a-week/4-team-IMYME-wiki/wiki)
-
-## 🏗️ Architecture Evolution
-
-MINE 서비스는 트래픽 증가와 기능 확장에 따라 인프라를 단계적으로 개선해왔습니다.
-
-### 최종 아키텍처
-
-<img width="731" height="772" alt="image" src="https://github.com/user-attachments/assets/074a1004-b7b7-405e-ad0d-70ad13cd81b0" />
-
-### V1 — 단일 서버 구조
-
-- 단일 EC2 인스턴스 기반 배포
-- 구조 단순하지만, 장애 시 서비스 전체 영향
-- 확장성 및 가용성 한계 존재
-
-### V2 — Docker 기반 확장 아키텍처
-
-- ALB + ASG + Docker 기반 3-Tier 구조
-- 트래픽 증가 시 EC2 단위 오토스케일링
-- 중앙 모니터링 (Prometheus, Grafana, Loki) 구축
-- 인스턴스 단위 확장 한계
-- 서비스별 세밀한 확장 어려움
-
-### V3 — Kubernetes 기반 운영
-
-- kubeadm 기반 클러스터 직접 구성
-- Pod 단위 확장 (HPA)으로 유연한 스케일링
-- ArgoCD 기반 GitOps 배포 도입
-
-## 📁 Repository Structure
-
-> 각 디렉토리에서 상세 README를 확인할 수 있습니다.
+## 📁 Project Structure
 
 ```
-.
-├── terraform/         # AWS 인프라 IaC (VPC, EC2, ALB 등)
-├── k8s/               # Kubernetes manifests & Helm (ArgoCD 관리)
-├── load_test/         # Locust 기반 부하 테스트 코드
-├── Locust_Result/     # 부하 테스트 결과
-├── .github/
-└── README.md
+terraform/
+├── .terraform.lock.hcl     # Provider 버전 고정 파일 (팀 간 동일한 실행 환경 보장)
+├── main.tf                 # 주요 인프라 리소스 정의 (VPC, Subnet, SG, EC2)
+├── providers.tf            # Terraform 및 AWS Provider 설정
+├── variables.tf            # 인프라에서 사용하는 변수 정의
+├── outputs.tf              # apply 후 확인할 출력 값 정의 (Public IP, DNS 등)
+├── .gitignore              # Git에 포함되지 않아야 할 파일/디렉토리 정의
+└── README.md               # 인프라 레포 설명 및 사용 가이드
 
 ```
+
+## 📌 Prerequisites
+
+Terraform을 실행하기 위해 아래 도구들이 필요합니다.
+MacOS 버전으로 작성되었습니다.
+
+### 1. Terraform 설치
+
+```bash
+brew update
+brew install terraform
+
+# 설치된 버전 확인
+terraform -version
+```
+
+### 2. AWS CLI 설치
+
+```bash
+brew install awscli
+aws --version
+```
+
+### 3. AWS 자격증명 설정
+
+- Terraform은 AWS CLI 자격증명을 사용합니다.
+  - AWS 계정의 AWS Access Key / Secret Key를 발급받아 아래 명령어로 설정합니다.
+  - 실제 Access Key / Secret Key 값은 Git에 커밋하지 않도록 주의해야합니다.
+
+```bash
+aws configure
+```
+
+## ▶️ How to Run
+
+```
+# ====== 사전 작업 ======
+
+# terraform 폴더로 이동
+cd terraform
+
+# 코드 포맷만 정리
+terraform fmt -recursive
+
+# Terraform 문법 및 구조 검증
+terraform init
+
+# Terraform 문법 및 구조 검증
+terraform validate
+
+# 변경 사항 미리 확인 (AWS 리소스 생성 X)
+terraform plan
+
+# ====== 실행 ======
+
+# AWS 인프라 생성
+terraform apply
+
+
+# ====== 결과물 확인 및 동작 확인 ======
+
+# apply 결과 출력 값 확인
+terraform output
+
+# SSH 접속하여 동작 확인
+ssh -i <your-key.pem> ubuntu@<public_ip>
+
+# ====== 삭제 ======
+
+# 삭제 계획 확인
+terraform plan -destroy
+
+# 생성된 리소스 실제 삭제
+terraform destroy
+
+```
+
+## 📦 Terraform State Management (S3 Backend)
+
+Terraform state를 여러 환경에서 일관되게 관리하기 위해,
+본 레포지토리는 S3를 원격 backend로 사용합니다.
+
+### 1. S3 버킷을 AWS 콘솔 또는 CLI를 통해 생성
+
+```
+aws s3api create-bucket \
+  --bucket <BUCKEY_NAME> \
+  --region <REGION> \
+  --create-bucket-configuration LocationConstraint=<REGION>
+```
+
+### 2. backend.tf 생성
+
+`terraform/` 디렉토리 하위에 `backend.tf` 파일을 생성합니다.
+
+```
+terraform {
+  backend "s3" {
+    bucket = "<BUCKET_NAME>"        # 1번에서 생성한 버킷명
+    key    = "<TERRAFORM_TFSTATE>"  # state 파일이 저장될 경로
+    region = "<REGION>"             # S3 버킷이 위치한 리전
+  }
+}
+```
+
+- S3 region은 Terraform을 실행할 AWS 리전과 동일하게 설정해야합니다.
+
+## ⚠️ Notes
+
+- 본 레포는 실제 AWS 리소스를 생성합니다.
+- `terraform apply` 실행 시 과금이 발생할 수 있습니다.
+- 실행 전 반드시 사용 중인 AWS 계정과 리전을 확인하세요.
