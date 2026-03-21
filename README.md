@@ -51,7 +51,7 @@
 
 ```
 
-### 상세 문서 바로가기
+### 디렉토리별 README 바로가기
 
 - [Kubernetes & ArgoCD 구성](https://github.com/Yu-Jin22/4-team-IMYME-cloud/tree/main/k8s)
 
