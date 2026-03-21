@@ -44,9 +44,19 @@
 .
 ├── terraform/         # AWS 인프라 IaC (VPC, EC2, ALB 등)
 ├── k8s/               # Kubernetes manifests & Helm (ArgoCD 관리)
-├── load_test/         # Locust 기반 부하 테스트 코드
+├── load_test/         # 부하 테스트 코드
 ├── Locust_Result/     # 부하 테스트 결과
 ├── .github/
 └── README.md
 
 ```
+
+### 상세 문서 바로가기
+
+- [Kubernetes & ArgoCD 구성](https://github.com/Yu-Jin22/4-team-IMYME-cloud/tree/main/k8s)
+
+- [Terraform 인프라 구성](https://github.com/Yu-Jin22/4-team-IMYME-cloud/tree/main/terraform)
+
+- [부하 테스트](https://github.com/Yu-Jin22/4-team-IMYME-cloud/tree/main/load_test)
+
+- [부하 테스트 결과](https://github.com/Yu-Jin22/4-team-IMYME-cloud/tree/main/Locust_Result)
