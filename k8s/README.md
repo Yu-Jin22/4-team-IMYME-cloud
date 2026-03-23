@@ -62,8 +62,8 @@ k8s/
 
    ```bash
    # Helm 차트 문법/템플릿 확인
-   helm lint prod/mine
-   helm template prod/mine --values prod/mine/values.yaml | head -n 200
+   helm lint k8s/prod/mine
+   helm template mine ./k8s/prod/mine -f ./k8s/prod/mine/values.yaml
    ```
 
 2. 자동 배포 (GitOps)
