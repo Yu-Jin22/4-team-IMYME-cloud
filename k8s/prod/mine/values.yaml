@@ -7,7 +7,7 @@ frontend:
 
   image:
     repository: 219268921033.dkr.ecr.ap-northeast-2.amazonaws.com/imyme-frontend
-    tag: "aaab6b89977d1a3db520b23bea7586de42c8a49e"
+    tag: "364fedf399a413216050a54c60a036c7e7d35462"
     pullPolicy: IfNotPresent
 
   service:
