@@ -34,7 +34,7 @@ frontend:
 
 backend:
   enabled: true
-  replicaCount: 3
+  replicaCount: 0
   containerPort: 8080
 
   image:
