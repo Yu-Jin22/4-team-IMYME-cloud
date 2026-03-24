@@ -34,12 +34,12 @@ frontend:
 
 backend:
   enabled: true
-  replicaCount: 0
+  replicaCount: 3
   containerPort: 8080
 
   image:
     repository: 219268921033.dkr.ecr.ap-northeast-2.amazonaws.com/imyme-backend
-    tag: "25798c33f63a6cbec8e1752642f1b6e64c452f6b"
+    tag: "dd56f15be18d7f028f36eb72944842823da7ed27"
     pullPolicy: IfNotPresent
 
   service:
